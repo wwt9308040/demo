@@ -153,3 +153,51 @@
 				return reg.test(obj.className);
 				
 			}
+
+
+			/*
+
+				修改表单事件提示
+				obj为事件发生的对象
+				tipsstr为提醒的字符串
+			*/
+
+			function tips(obj,tipsstr){
+			obj.oninvalid = function(){
+				this.setCustomValidity(tipsstr);
+			}
+		};
+
+		//提取一个专门用来拖拽的函数
+	function drag(obj){
+		obj.onmousedown = function(event){
+			//设置box1捕获所有按下的事件
+			obj.setCapture&&obj.setCapture();
+			event = event||window.event;
+			var ol = event.clientX - obj.offsetLeft;
+			var ot = event.clientY - obj.offsetTop;
+			document.onmousemove = function(event){
+					event =  event||window.event;
+					var left = event.clientX - ol;
+					var top = event.clientY - ot;
+					obj.style.left = left + "px";
+					obj.style.top = top  + "px";
+			};
+
+			document.onmouseup = function(){
+					//取消
+					document.onmousemove = null;
+					document.onmouseup = null;
+					//当鼠标松开时取消对事件的捕获
+					obj.releaseCapture&&obj.releaseCapture();
+								};
+
+			/*
+			当我们拖拽一个网页中的内容时，浏览器会默认去搜索引擎中搜索内容
+			这是 浏览器提供的默认行为可以通过return false;可以取消默认行为
+
+			*/
+
+			return false;
+		};
+	}
